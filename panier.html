@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mon Panier — summertime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FFF3E0;--ivory:#FFFBF2;--gold:#FF7C00;--gold-lt:#FFB347;--gold-dk:#E05A00;--charcoal:#2C1810;--stone:#8B5E3C;--pebble:#C49A6C;--blush:#FFE8C0;--border:#FFD4A0;--ocean:#E8430A;--teal:#FF8C00;--coral:#FF3D3D;--sand:#FFE4B5;--radius:10px;--t:.28s cubic-bezier(.4,0,.2,1);--max:1360px;
+--palm:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg opacity='.12' stroke='%23C47800' stroke-width='2.5' fill='none' stroke-linecap='round'%3E%3Cpath d='M95 165 Q98 138 100 108'/%3E%3Cpath d='M100 108 Q70 72 32 66'/%3E%3Cpath d='M100 108 Q118 65 148 52'/%3E%3Cpath d='M100 108 Q88 68 74 35'/%3E%3Cpath d='M100 108 Q128 82 158 88'/%3E%3Cpath d='M100 108 Q62 90 22 95'/%3E%3Ccircle cx='100' cy='107' r='4' fill='%23C47800'/%3E%3C/g%3E%3C/svg%3E");
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Poppins',sans-serif;background:var(--ivory);color:var(--charcoal);-webkit-font-smoothing:antialiased;line-height:1.6}
+
+.announce{background:linear-gradient(90deg,#FF4500,#FF8C00,#FFB347);color:#fff;text-align:center;padding:10px 24px;font-size:11.5px;letter-spacing:1.8px;text-transform:uppercase;font-weight:600}
+.announce a{color:#fff;text-decoration:underline}
+
+.site-header{position:sticky;top:0;z-index:100;background:rgba(255,251,242,.97);backdrop-filter:blur(14px);border-bottom:2px solid var(--border);transition:box-shadow var(--t)}
+.site-header.scrolled{box-shadow:0 2px 24px rgba(255,124,0,.13)}
+.header-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 32px;height:72px}
+.nav-left,.nav-right{display:flex;align-items:center;gap:2px}
+.nav-right{justify-content:flex-end}
+.site-nav a{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--stone);text-decoration:none;font-weight:600;padding:7px 13px;border-radius:20px;transition:color var(--t),background var(--t)}
+.site-nav a:hover{color:var(--gold-dk);background:var(--blush)}
+.logo{text-align:center;text-decoration:none;color:var(--charcoal);display:block}
+.logo-main{font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;letter-spacing:3px;text-transform:uppercase;display:block;line-height:1;color:var(--gold-dk)}
+.logo-sub{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-top:4px}
+.header-actions{display:flex;align-items:center;gap:2px}
+.btn-icon{width:40px;height:40px;border:none;background:none;border-radius:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--stone);position:relative;transition:color var(--t),background var(--t)}
+.btn-icon:hover{color:var(--gold-dk);background:var(--blush)}
+.btn-icon svg{width:18px;height:18px;stroke-width:1.5}
+.cart-badge{position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:var(--coral);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:all .2s cubic-bezier(.34,1.56,.64,1)}
+.cart-badge.visible{opacity:1;transform:scale(1)}
+
+.page-hero{background:var(--cream);border-bottom:2px solid var(--border);padding:52px 32px;text-align:center}
+.label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px;display:block}
+.page-hero h1{font-family:'Nunito',sans-serif;font-size:clamp(36px,5vw,60px);font-weight:800}
+.page-hero h1 em{font-style:italic}
+.breadcrumb{margin-top:16px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--stone)}
+.breadcrumb a{color:var(--stone);text-decoration:none}
+
+/* CART DRAWER */
+.overlay{position:fixed;inset:0;background:rgba(44,24,16,.5);z-index:199;opacity:0;pointer-events:none;transition:opacity var(--t)}
+.overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100vw;background:var(--ivory);z-index:200;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);border-left:3px solid var(--border)}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{padding:26px 28px 18px;border-bottom:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--cream)}
+.cart-head h3{font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:var(--gold-dk)}
+.cart-close{width:34px;height:34px;border:2px solid var(--border);background:none;cursor:pointer;font-size:15px;color:var(--stone);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
+.cart-body{flex:1;overflow-y:auto;padding:22px 28px}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:14px;color:var(--pebble);text-align:center}
+.cart-items{display:flex;flex-direction:column;gap:18px}
+.cart-item{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:start;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.cart-item:last-child{border-bottom:none}
+.ci-img{width:82px;height:82px;border-radius:14px;background:var(--cream);flex-shrink:0;border:3px solid var(--gold-lt);overflow:hidden;position:relative}
+.ci-img img{width:100%;height:100%;object-fit:cover;display:block}
+.ci-name{font-size:13px;font-weight:600;margin-bottom:3px;line-height:1.3}
+.ci-price{font-size:12px;color:var(--gold-dk);font-weight:600;margin-bottom:10px}
+.ci-qty{display:flex;align-items:center;gap:9px}
+.qty-btn{width:26px;height:26px;border:2px solid var(--border);background:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--stone);transition:all var(--t);border-radius:50%}
+.qty-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--blush)}
+.qty-val{font-size:13px;font-weight:700;min-width:18px;text-align:center}
+.ci-remove{background:none;border:none;cursor:pointer;color:var(--pebble);font-size:15px;padding:4px;transition:color var(--t)}
+.ci-remove:hover{color:var(--coral)}
+.cart-foot{padding:18px 28px 26px;border-top:2px solid var(--border);background:var(--cream)}
+.cart-sub{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.cart-sub span{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--stone);font-weight:600}
+.cart-sub strong{font-family:'Nunito',sans-serif;font-size:26px;font-weight:800;color:var(--gold-dk)}
+.cart-note{font-size:11px;color:var(--pebble);margin-bottom:18px}
+.btn-checkout{width:100%;padding:15px;background:linear-gradient(135deg,var(--gold),var(--ocean));color:#fff;border:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700;cursor:pointer;transition:all var(--t);font-family:'Poppins',sans-serif;border-radius:30px}
+.btn-checkout:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,124,0,.4)}
+
+/* PAGE PANIER */
+.cart-page{max-width:var(--max);margin:0 auto;padding:52px 32px 100px;display:grid;grid-template-columns:1fr 380px;gap:56px;align-items:start}
+
+.cart-items-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:2px solid var(--border);margin-bottom:28px}
+.cart-items-head h2{font-family:'Nunito',sans-serif;font-size:24px;font-weight:700}
+.cart-items-head span{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--stone)}
+
+.page-cart-item{display:grid;grid-template-columns:110px 1fr auto;gap:20px;align-items:start;padding:20px;margin-bottom:16px;border-radius:16px;border:2px solid var(--border);background:var(--ivory);transition:box-shadow var(--t),transform var(--t)}
+.page-cart-item:hover{box-shadow:0 6px 24px rgba(255,124,0,.15);transform:translateY(-2px)}
+.pci-img{width:120px;height:120px;border-radius:16px;background:var(--cream);flex-shrink:0;border:3px solid var(--gold-lt);overflow:hidden;position:relative}
+.pci-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pci-cat{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:5px}
+.pci-name{font-family:'Nunito',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;line-height:1.2}
+.pci-price{font-size:14px;color:var(--stone);margin-bottom:14px}
+.pci-qty{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;width:fit-content}
+.pci-qty .qty-btn{width:36px;height:36px;border:none;border-right:1px solid var(--border);border-radius:0}
+.pci-qty .qty-btn:last-child{border-right:none;border-left:1px solid var(--border)}
+.pci-qty .qty-val{font-size:13px;font-weight:500;min-width:44px;text-align:center}
+.pci-info{background:rgba(255,251,242,.88);border-radius:10px;padding:10px 12px}
+.pci-right{text-align:right;background:rgba(255,251,242,.88);border-radius:10px;padding:10px 12px}
+.pci-total{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--charcoal)}
+.pci-remove{background:none;border:none;cursor:pointer;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--pebble);font-family:'Poppins',sans-serif;transition:color var(--t)}
+.pci-remove:hover{color:var(--coral)}
+
+.empty-cart{text-align:center;padding:80px 0}
+.empty-cart .ec-emoji{font-size:56px;opacity:.35;margin-bottom:20px}
+.empty-cart h2{font-family:'Nunito',sans-serif;font-size:28px;font-weight:700;margin-bottom:12px}
+.empty-cart p{color:var(--stone);font-size:14px;margin-bottom:32px}
+.btn-dark{display:inline-block;padding:14px 32px;background:var(--charcoal);color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;border-radius:30px;transition:background var(--t);cursor:pointer;border:none;font-family:'Poppins',sans-serif}
+.btn-dark:hover{background:var(--gold-dk)}
+
+/* RÉCAP COMMANDE */
+.order-summary{position:sticky;top:88px;background:var(--cream);border:2px solid var(--border);border-radius:var(--radius);padding:28px;overflow:hidden}
+.os-title{font-family:'Nunito',sans-serif;font-size:22px;font-weight:700;margin-bottom:16px}
+
+.os-items{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.os-item{display:flex;align-items:center;gap:12px}
+.os-item-thumb{width:62px;height:62px;border-radius:12px;background:var(--cream);flex-shrink:0;border:3px solid var(--gold-lt);overflow:hidden}
+.os-item-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.os-item-qty-badge{position:absolute;top:-5px;right:-5px;background:var(--gold);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1}
+.os-item-info{flex:1;min-width:0}
+.os-item-name{font-size:13px;font-weight:600;color:var(--charcoal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.os-item-sub{font-size:12px;color:var(--stone)}
+
+.os-line{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:12px;color:var(--stone)}
+.os-line strong{color:var(--charcoal);font-weight:600}
+.os-free{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:#166534;font-weight:600;margin:12px 0;text-align:center}
+.os-total{display:flex;justify-content:space-between;align-items:baseline;padding:16px 0;border-top:1px solid var(--border);margin-top:8px;margin-bottom:20px}
+.os-total span{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--stone)}
+.os-total strong{font-family:'Nunito',sans-serif;font-size:30px;font-weight:800;color:var(--gold-dk)}
+.os-trust{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.os-trust-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--stone)}
+.os-trust-item span{font-size:15px}
+
+.promo-row{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.promo-row input{flex:1;padding:11px 14px;background:transparent;border:none;font-size:13px;outline:none;font-family:'Poppins',sans-serif;color:var(--charcoal)}
+.promo-row input::placeholder{color:var(--pebble)}
+.promo-row button{padding:11px 16px;background:var(--charcoal);border:none;color:#fff;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:background var(--t);white-space:nowrap}
+.promo-row button:hover{background:var(--gold)}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,var(--gold-dk),var(--ocean));color:#fff;padding:12px 24px;font-size:12px;z-index:300;display:flex;align-items:center;gap:10px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 24px rgba(255,124,0,.35);border-radius:30px;font-weight:600}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast svg{width:15px;height:15px;color:#FFE8C0;flex-shrink:0}
+
+/* FOOTER */
+.site-footer{background:linear-gradient(160deg,#2C1810,#1A0A00);color:#fff;padding:72px 32px 36px}
+.footer-inner{max-width:var(--max);margin:0 auto}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:60px}
+.footer-brand .logo-main{color:var(--gold-lt)}
+.footer-brand p{color:rgba(255,255,255,.4);font-size:13px;margin-top:22px;line-height:1.85;font-weight:300}
+.footer-col h5{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-lt);font-weight:700;margin-bottom:22px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.footer-col ul a{color:rgba(255,255,255,.4);font-size:13px;text-decoration:none;font-weight:300;transition:color var(--t)}
+.footer-col ul a:hover{color:var(--gold-lt)}
+.footer-bottom{border-top:1px solid rgba(255,124,0,.15);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.footer-bottom p{font-size:11px;color:rgba(255,255,255,.22);letter-spacing:.5px}
+.pay-row{display:flex;gap:8px}
+.pay-chip{padding:4px 9px;border:1px solid rgba(255,124,0,.2);border-radius:5px;font-size:9.5px;color:rgba(255,179,71,.5);letter-spacing:1px;font-weight:600}
+
+@media(max-width:1024px){.cart-page{grid-template-columns:1fr}.order-summary{position:static}.footer-grid{grid-template-columns:1fr 1fr;gap:36px}}
+@media(max-width:768px){.header-inner{grid-template-columns:auto 1fr auto;padding:0 16px}.nav-left{display:none}.hamburger{display:flex}.logo-main{font-size:20px;letter-spacing:2px}.footer-grid{grid-template-columns:1fr;gap:28px}.cart-drawer{width:100vw}}
+@media(max-width:640px){
+  .cart-page{padding:20px 12px 80px}
+  .page-cart-item{grid-template-columns:80px 1fr;gap:12px}
+  .pci-right{display:none}
+  .pci-img{width:80px;height:80px}
+  .pci-name{font-size:16px}
+  .page-hero{padding:30px 16px}
+  .cart-items-head{flex-direction:column;align-items:flex-start;gap:6px}
+}
+</style>
+</head>
+<body>
+
+<div class="announce">Livraison offerte dès 80 € &nbsp;·&nbsp; Retours 30 jours &nbsp;·&nbsp; <a href="boutique.html">Continuer mes achats</a></div>
+
+<header class="site-header" id="main-header">
+  <div class="header-inner">
+    <div class="nav-left"><nav class="site-nav"><a href="boutique.html">Collections</a><a href="boutique.html?filter=nouveautes">Nouveautés</a><a href="contact.html">L'Esprit</a></nav></div>
+    <a href="index.html" class="logo"><span class="logo-main">summertime</span><span class="logo-sub">L'Évasion Aquatique</span></a>
+    <div class="nav-right"><nav class="site-nav"><a href="contact.html">Nos Valeurs</a><a href="contact.html">Contact</a></nav>
+      <div class="header-actions">
+        <button class="btn-icon" onclick="openCart()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-badge" id="cart-badge"></span></button>
+        <button class="btn-icon hamburger" onclick="toggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <span class="label">Récapitulatif</span>
+  <h1>Mon <em style="color:var(--ocean)">Panier</em></h1>
+  <div class="breadcrumb"><a href="index.html">Accueil</a> &nbsp;/&nbsp; Mon Panier</div>
+</div>
+
+<div class="cart-page">
+  <div id="cart-items-side"></div>
+  <div class="order-summary" id="order-summary" style="display:none">
+    <div class="os-title">Résumé</div>
+    <div class="os-items" id="os-items"></div>
+    <div class="os-line"><span>Sous-total</span><strong id="os-sub">—</strong></div>
+    <div class="os-line"><span>Livraison</span><strong id="os-ship">—</strong></div>
+    <div class="os-free" id="os-free-msg" style="display:none">✓ Livraison offerte !</div>
+    <div class="promo-row"><input type="text" placeholder="Code promo" id="promo-input"><button onclick="applyPromo()">Appliquer</button></div>
+    <div class="os-total"><span>Total</span><strong id="os-total">—</strong></div>
+    <button class="btn-dark" style="width:100%;padding:16px;font-size:11px;text-align:center;display:block" onclick="window.location='paiement.html'">Passer commande →</button>
+    <div class="os-trust">
+      <div class="os-trust-item"><span>🔒</span> Paiement 100% sécurisé</div>
+      <div class="os-trust-item"><span>↩</span> Retours gratuits 30 jours</div>
+      <div class="os-trust-item"><span>🌊</span> Service client 7j/7</div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-head"><h3>Votre Sélection <span id="cart-label" style="font-family:'Poppins';font-size:13px;color:var(--stone);font-weight:400"></span></h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot" style="display:none">
+    <div class="cart-sub"><span>Sous-total</span><strong id="cart-total"></strong></div>
+    <p class="cart-note">Livraison calculée à l'étape suivante</p>
+    <button class="btn-checkout" onclick="window.location='paiement.html'">Finaliser la commande</button>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toast-msg"></span></div>
+
+<footer class="site-footer"><div class="footer-inner">
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="index.html" class="logo"><span class="logo-main">summertime</span><span class="logo-sub">L'Évasion Aquatique</span></a><p>Des pièces pensées pour l'été aquatique. Plage, piscine, bord de mer.</p></div>
+    <div class="footer-col"><h5>Collections</h5><ul><li><a href="boutique.html?filter=nouveautes">Nouveautés</a></li><li><a href="boutique.html">Best-sellers</a></li></ul></div>
+    <div class="footer-col"><h5>Service</h5><ul><li><a href="contact.html">Livraison</a></li><li><a href="contact.html">Retours</a></li></ul></div>
+    <div class="footer-col"><h5>Légal</h5><ul><li><a href="#">CGV</a></li><li><a href="#">Confidentialité</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 summertime — L'Évasion Aquatique</p><div class="pay-row"><span class="pay-chip">VISA</span><span class="pay-chip">MC</span><span class="pay-chip">AMEX</span><span class="pay-chip">PAYPAL</span></div></div>
+</div></footer>
+
+<script>
+const PRODUCTS=[
+  {id:1,name:"Paddle Gonflable Bass Hunter 11'6\"",category:"Paddles",price:449.00,emoji:"🏄",img:"paddle-1.jpg.jpg"},
+  {id:2,name:"Seaglide Spinera Catua",category:"Seaglides",price:1290.00,emoji:"🤿",img:"seaglide-1.jpg.jpg"},
+  {id:3,name:"Chaise Flottante Tropicale",category:"Matelas Gonflables",price:39.90,emoji:"🪑",img:"chaise-1.jpg.jpg"},
+  {id:4,name:"AirFlow Mini Ventilateur Portable",category:"Accessoires",price:29.90,emoji:"💨",img:"airflow-1.jpg.jpg"}
+];
+
+function fmt(n){return n.toFixed(2).replace('.',',');}
+let cart=JSON.parse(localStorage.getItem('__aqz_cart')||'[]');
+
+function saveCart(){localStorage.setItem('__aqz_cart',JSON.stringify(cart));renderCart();}
+function cartCount(){return cart.reduce((s,i)=>s+i.qty,0);}
+function cartSubtotal(){return cart.reduce((s,i)=>s+i.price*i.qty,0);}
+function getProduct(id){return PRODUCTS.find(x=>x.id===id);}
+
+function cQty(id,d){
+  const i=cart.find(x=>x.id===id);
+  if(!i)return;
+  i.qty+=d;
+  if(i.qty<=0)cart=cart.filter(x=>x.id!==id);
+  saveCart();
+  renderPageCart();
+}
+function cRemove(id){cart=cart.filter(x=>x.id!==id);saveCart();renderPageCart();}
+
+let toastT;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function openCart(){document.getElementById('cart-drawer').classList.add('open');document.getElementById('overlay').classList.add('open');}
+function closeCart(){document.getElementById('cart-drawer').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+
+function renderCart(){
+  const n=cartCount();
+  const badge=document.getElementById('cart-badge');
+  const lbl=document.getElementById('cart-label');
+  const body=document.getElementById('cart-body');
+  const foot=document.getElementById('cart-foot');
+  if(badge){badge.textContent=n;badge.classList.toggle('visible',n>0);}
+  if(lbl)lbl.textContent=n>0?`(${n})`:'';
+  if(!body)return;
+  if(!cart.length){
+    body.innerHTML='<div class="cart-empty"><p>Votre panier est vide</p></div>';
+    if(foot)foot.style.display='none';return;
+  }
+  if(foot){
+    foot.style.display='block';
+    document.getElementById('cart-total').textContent=fmt(cartSubtotal())+' €';
+  }
+  body.innerHTML='<div class="cart-items">'+cart.map(i=>{
+    const p=getProduct(i.id);
+    return`<div class="cart-item">
+      <div class="ci-img">${p&&p.img?`<img src="${p.img}" alt="${i.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:''}</div>
+      <div>
+        <div class="ci-name">${i.name}</div>
+        <div class="ci-price">${fmt(i.price)} €</div>
+        <div class="ci-qty">
+          <button class="qty-btn" onclick="cQty(${i.id},-1)">−</button>
+          <span class="qty-val">${i.qty}</span>
+          <button class="qty-btn" onclick="cQty(${i.id},1)">+</button>
+        </div>
+      </div>
+      <button class="ci-remove" onclick="cRemove(${i.id})">✕</button>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function renderPageCart(){
+  const side=document.getElementById('cart-items-side');
+  const summary=document.getElementById('order-summary');
+  if(!cart.length){
+    side.innerHTML=`<div class="empty-cart"><div class="ec-emoji">🌊</div><h2>Votre panier est vide</h2><p>Découvrez nos bouées, transats, matelas et seaglides.</p><a href="boutique.html" class="btn-dark">Découvrir la boutique</a></div>`;
+    summary.style.display='none';
+    return;
+  }
+  summary.style.display='block';
+  const sub=cartSubtotal();
+  const shipping=sub>=80?0:5.90;
+  const total=sub+shipping;
+  document.getElementById('os-sub').textContent=fmt(sub)+' €';
+  document.getElementById('os-ship').textContent=shipping===0?'Offerte':fmt(shipping)+' €';
+  document.getElementById('os-free-msg').style.display=sub>=80?'block':'none';
+  document.getElementById('os-total').textContent=fmt(total)+' €';
+
+  // mini photos dans le récap
+  document.getElementById('os-items').innerHTML=cart.map(item=>{
+    const p=getProduct(item.id);
+    return`<div class="os-item">
+      <div class="os-item-thumb" style="position:relative">
+        ${p&&p.img?`<img src="${p.img}" alt="${item.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:''}
+        <span class="os-item-qty-badge">${item.qty}</span>
+      </div>
+      <div class="os-item-info">
+        <div class="os-item-name">${item.name}</div>
+        <div class="os-item-sub">${fmt(item.price*item.qty)} €</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // liste articles
+  side.innerHTML=`<div class="cart-items-head"><h2>${cart.length} article${cart.length>1?'s':''}</h2><span>${fmt(sub)} €</span></div>`+
+    cart.map(item=>{
+      const p=getProduct(item.id);
+      return`<div class="page-cart-item">
+        <div class="pci-img">
+          ${p&&p.img?`<img src="${p.img}" alt="${item.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:``}
+        </div>
+        <div class="pci-info">
+          <div class="pci-cat">${p?p.category:''}</div>
+          <div class="pci-name">${item.name}</div>
+          <div class="pci-price">${fmt(item.price)} € / unité</div>
+          <div class="pci-qty">
+            <button class="qty-btn" onclick="cQty(${item.id},-1)">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="cQty(${item.id},1)">+</button>
+          </div>
+        </div>
+        <div class="pci-right">
+          <div class="pci-total">${fmt(item.price*item.qty)} €</div>
+          <button class="pci-remove" onclick="cRemove(${item.id})">Retirer</button>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+function applyPromo(){
+  const v=document.getElementById('promo-input').value.trim().toUpperCase();
+  if(v==='SUMMERTIME20')showToast('Code −20 % appliqué !');
+  else if(v)showToast('Code invalide ou expiré');
+}
+
+renderCart();
+renderPageCart();
+window.addEventListener('scroll',()=>{document.getElementById('main-header').classList.toggle('scrolled',scrollY>60);});
+function toggleMenu(){const nav=document.querySelector('.nav-left');if(!nav)return;if(nav.style.display==='flex'){nav.style.display='';}else{nav.style.cssText='display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ivory);padding:20px 24px;border-bottom:2px solid var(--border);gap:4px;z-index:99;';}}
+</script>
+</body></html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Contact & Notre Histoire — summertime</title>
+<link rel="stylesheet" href="_base.css">
+<style>
+.page-hero{background:var(--charcoal);padding:80px 32px;text-align:center;position:relative;overflow:hidden}
+.page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,rgba(27,108,168,.18),transparent 65%);pointer-events:none}
+.page-hero .label{color:var(--gold-lt);margin-bottom:16px;position:relative}
+.page-hero h1{font-family:'Nunito',sans-serif;font-size:clamp(40px,6vw,70px);font-weight:300;color:#fff;letter-spacing:0px;line-height:1.05;position:relative}
+.page-hero h1 em{font-style:italic;color:var(--gold-lt)}
+.page-hero p{color:rgba(255,255,255,.45);font-size:15px;max-width:480px;margin:20px auto 0;font-weight:300;line-height:1.85;position:relative}
+
+.values{max-width:var(--max);margin:0 auto;padding:88px 32px}
+.val-head{text-align:center;margin-bottom:60px}
+.val-head h2{font-family:'Nunito',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:300;letter-spacing:0px}
+.val-head h2 em{font-style:italic}
+.val-head .label{margin-bottom:14px}
+.val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.val-card{text-align:center;padding:44px 32px;background:var(--cream) var(--tropical-bg) repeat;background-size:180px 180px;border:1px solid var(--border);border-radius:var(--radius)}
+.val-icon{font-size:36px;margin-bottom:20px;display:block}
+.val-card h3{font-family:'Nunito',sans-serif;font-size:22px;font-weight:400;margin-bottom:14px;letter-spacing:-.3px}
+.val-card p{font-size:13px;color:var(--stone);line-height:1.85;font-weight:300}
+
+.contact-section{background:var(--cream) var(--tropical-bg) repeat;background-size:180px 180px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.contact-inner{max-width:var(--max);margin:0 auto;padding:88px 32px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-info h2{font-family:'Nunito',sans-serif;font-size:clamp(28px,3.5vw,40px);font-weight:300;letter-spacing:0px;margin-bottom:20px}
+.contact-info h2 em{font-style:italic}
+.contact-info p{font-size:14px;color:var(--stone);line-height:1.85;margin-bottom:32px;font-weight:300}
+.contact-detail{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.cd-icon{width:40px;height:40px;background:var(--blush);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cd-text strong{display:block;font-size:13px;font-weight:500;margin-bottom:3px}
+.cd-text span{font-size:13px;color:var(--stone)}
+
+.contact-form h3{font-family:'Nunito',sans-serif;font-size:24px;font-weight:400;margin-bottom:28px}
+.form-group{margin-bottom:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.form-group label,.form-row label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;color:var(--stone);margin-bottom:8px}
+.form-group input,.form-group select,.form-group textarea,.form-row input{width:100%;padding:12px 16px;background:var(--ivory);border:1px solid var(--border);border-radius:var(--radius);font-size:14px;outline:none;transition:border-color var(--t);font-family:'Poppins',sans-serif;color:var(--charcoal)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus,.form-row input:focus{border-color:var(--ocean)}
+.form-group textarea{resize:vertical;min-height:140px;line-height:1.6}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238C8178' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;cursor:pointer}
+
+.map-section{max-width:var(--max);margin:0 auto;padding:0 32px 88px}
+.map-placeholder{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--stone)}
+.map-placeholder span{font-size:40px;opacity:.4}
+.map-placeholder p{font-size:13px;font-weight:300;text-align:center;line-height:1.7}
+.map-address{font-size:14px;font-weight:500;color:var(--charcoal);text-align:center}
+
+.faq{max-width:760px;margin:0 auto;padding:0 32px 100px}
+.faq-head{text-align:center;margin-bottom:48px}
+.faq-head h2{font-family:'Nunito',sans-serif;font-size:clamp(26px,3.5vw,38px);font-weight:300;letter-spacing:0px}
+.faq-head h2 em{font-style:italic}
+.faq-head .label{margin-bottom:12px}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;padding:22px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Poppins',sans-serif;font-size:15px;font-weight:500;color:var(--charcoal);transition:color var(--t)}
+.faq-q:hover{color:var(--ocean)}
+.faq-q .faq-ico{font-size:20px;font-weight:300;color:var(--ocean);transition:transform var(--t);flex-shrink:0}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease}
+.faq-a p{font-size:14px;color:var(--stone);line-height:1.85;font-weight:300;padding-bottom:20px}
+.faq-item.open .faq-a{max-height:200px}
+.faq-item.open .faq-ico{transform:rotate(45deg)}
+
+@media(max-width:1024px){.val-grid{grid-template-columns:1fr 1fr}.contact-inner{grid-template-columns:1fr;gap:48px}}
+@media(max-width:640px){.val-grid{grid-template-columns:1fr}.values,.faq,.map-section{padding-left:16px;padding-right:16px}.contact-inner{padding:56px 16px}.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="announce">Livraison offerte dès 80 € &nbsp;·&nbsp; Retours 30 jours &nbsp;·&nbsp; <a href="boutique.html">Découvrir la boutique</a></div>
+
+<header class="site-header" id="main-header">
+  <div class="header-inner">
+    <div class="nav-left"><nav class="site-nav"><a href="boutique.html">Collections</a><a href="boutique.html?filter=nouveautes">Nouveautés</a><a href="contact.html" class="active">L'Esprit</a></nav></div>
+    <a href="index.html" class="logo"><span class="logo-main">summertime</span><span class="logo-sub">L'Évasion Aquatique</span></a>
+    <div class="nav-right"><nav class="site-nav"><a href="contact.html" class="active">Nos Valeurs</a><a href="contact.html">Contact</a></nav>
+      <div class="header-actions">
+        <button class="btn-icon" onclick="openSearch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7.5"/><path d="M20.5 20.5l-4-4"/></svg></button>
+        <button class="btn-icon" onclick="openCart()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-badge" id="cart-badge">0</span></button>
+        <button class="btn-icon hamburger" onclick="toggleMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="label">Notre Maison</div>
+  <h1>Notre <em>Histoire</em></h1>
+  <p>Fondée à Marseille en 2020, summertime naît d'une passion pour la mer et les sports nautiques. Nous sélectionnons les meilleures bouées, transats, matelas gonflables et seaglides pour que chaque moment au bord de l'eau soit inoubliable.</p>
+</div>
+
+<section class="values" data-reveal>
+  <div class="val-head">
+    <div class="label">Ce en quoi nous croyons</div>
+    <h2>Nos <em>Valeurs</em></h2>
+  </div>
+  <div class="val-grid">
+    <div class="val-card"><span class="val-icon">🌊</span><h3>L'Authenticité Marine</h3><p>Chaque produit est sélectionné par des passionnés de nautisme qui connaissent la mer. Nous privilégions la qualité, la durabilité et la sécurité pour tous vos moments aquatiques.</p></div>
+    <div class="val-card"><span class="val-icon">🌿</span><h3>La Durabilité</h3><p>Nous sélectionnons des matériaux résistants, des finitions qui supportent le sel, le chlore et les UV. Nos produits sont pensés pour durer de nombreuses saisons estivales.</p></div>
+    <div class="val-card"><span class="val-icon">☀️</span><h3>L'Expérience</h3><p>De la découverte à la réception, chaque étape est pensée pour que vous profitiez au maximum de vos vacances. Un service sincère, 7j/7 en saison.</p></div>
+  </div>
+</section>
+
+<div class="contact-section" data-reveal>
+  <div class="contact-inner">
+    <div class="contact-info">
+      <div class="label" style="margin-bottom:14px">Nous contacter</div>
+      <h2>Une question ?<br><em>Parlons-en.</em></h2>
+      <p>Notre équipe est disponible 7j/7 pour répondre à toutes vos questions — qu'il s'agisse d'un conseil, d'un suivi de commande ou d'une demande personnalisée.</p>
+      <div class="contact-detail"><div class="cd-icon">📧</div><div class="cd-text"><strong>Email</strong><span>bonjour@aquazur.fr</span></div></div>
+      <div class="contact-detail"><div class="cd-icon">📞</div><div class="cd-text"><strong>Téléphone</strong><span>+33 4 91 00 00 00 · Lun–Sam 9h–18h</span></div></div>
+      <div class="contact-detail"><div class="cd-icon">📍</div><div class="cd-text"><strong>Showroom</strong><span>14 quai du Port, 13002 Marseille</span></div></div>
+    </div>
+    <div class="contact-form">
+      <h3>Envoyer un message</h3>
+      <form onsubmit="event.preventDefault();showToast('Message envoyé ! Nous vous répondons sous 24h.')">
+        <div class="form-row">
+          <div><label>Prénom</label><input type="text" placeholder="Marie" required></div>
+          <div><label>Nom</label><input type="text" placeholder="Dupont" required></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="marie@email.com" required></div>
+        <div class="form-group"><label>Sujet</label>
+          <select><option>Suivi de commande</option><option>Question produit</option><option>Retour / Échange</option><option>Partenariat</option><option>Autre</option></select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea placeholder="Votre message…" required></textarea></div>
+        <button type="submit" class="btn-dark" style="width:100%">Envoyer le message</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="map-section" style="padding-top:64px" data-reveal>
+  <div class="map-placeholder">
+    <span>🗺️</span>
+    <div class="map-address">14 quai du Port, 13002 Marseille</div>
+    <p>Showroom ouvert du mardi au samedi<br>de 10h à 19h — Sur rendez-vous le lundi</p>
+  </div>
+</div>
+
+<section class="faq" data-reveal>
+  <div class="faq-head">
+    <div class="label">Questions fréquentes</div>
+    <h2>On vous <em>répond</em></h2>
+  </div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Quels sont les délais de livraison ? <span class="faq-ico">+</span></button><div class="faq-a"><p>Toutes les commandes sont expédiées sous 24h ouvrées depuis notre entrepôt marseillais. La livraison standard est effectuée en 2 à 4 jours ouvrés en France métropolitaine. Une option express (24h) est disponible au moment du paiement.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">La livraison est-elle vraiment gratuite ? <span class="faq-ico">+</span></button><div class="faq-a"><p>Oui ! La livraison standard est offerte pour toute commande dès 80 € d'achat. En dessous de ce montant, une participation forfaitaire de 5,90 € est demandée.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne la politique de retours ? <span class="faq-ico">+</span></button><div class="faq-a"><p>Vous disposez de 30 jours à compter de la réception pour nous retourner tout article qui ne vous satisferait pas. Les retours sont gratuits. Le remboursement intégral est effectué sous 5 jours ouvrés après réception du colis retour.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Les bouées et matelas sont-ils vraiment résistants ? <span class="faq-ico">+</span></button><div class="faq-a"><p>Absolument. Nous sélectionnons uniquement des produits en PVC haute résistance, résistants aux UV, au chlore et à l'eau salée. Chaque produit est certifié CE et testé pour assurer votre sécurité en mer et en piscine.</p></div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Les seaglides sont-ils adaptés aux débutants ? <span class="faq-ico">+</span></button><div class="faq-a"><p>Oui, notre gamme Seaglide Explorer Junior est spécialement conçue pour les enfants dès 10 ans et les débutants. Nos équipes peuvent vous conseiller sur le modèle le plus adapté à votre niveau et à votre usage. Contactez-nous pour un conseil personnalisé.</p></div></div>
+</section>
+
+<footer class="site-footer"><div class="footer-inner">
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="index.html" class="logo"><span class="logo-main">summertime</span><span class="logo-sub">L'Évasion Aquatique</span></a><p>Des pièces pensées pour l'été aquatique. La plage, la piscine, la mer — vécus avec style et légèreté depuis Marseille.</p><div class="footer-socials"><a href="#" class="footer-social">f</a><a href="#" class="footer-social">ig</a><a href="#" class="footer-social">p</a></div></div>
+    <div class="footer-col"><h5>Collections</h5><ul><li><a href="boutique.html?filter=nouveautes">Nouveautés</a></li><li><a href="boutique.html">Best-sellers</a></li><li><a href="boutique.html">Bouées de Plage</a></li></ul></div>
+    <div class="footer-col"><h5>Service</h5><ul><li><a href="contact.html">Notre Histoire</a></li><li><a href="contact.html">Livraison</a></li><li><a href="contact.html">Retours</a></li></ul></div>
+    <div class="footer-col"><h5>Légal</h5><ul><li><a href="#">CGV</a></li><li><a href="#">Confidentialité</a></li><li><a href="#">Mentions Légales</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 summertime — L'Évasion Aquatique — Tous droits réservés</p><div class="pay-row"><span class="pay-chip">VISA</span><span class="pay-chip">MC</span><span class="pay-chip">AMEX</span><span class="pay-chip">PAYPAL</span><span class="pay-chip">APPLE PAY</span></div></div>
+</div></footer>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-head"><h3>Votre Sélection <span id="cart-label" style="font-family:'Poppins';font-size:13px;color:var(--stone);font-weight:400"></span></h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-foot" id="cart-foot" style="display:none"><div class="cart-sub"><span>Sous-total</span><strong id="cart-total"></strong></div><p class="cart-note">Livraison calculée à l'étape suivante</p><button class="btn-checkout" onclick="checkout()">Finaliser la commande</button></div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toast-msg"></span></div>
+
+<script src="products.js"></script>
+<script src="_cart.js"></script>
+<script>
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+renderCart();
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-header').classList.toggle('scrolled',scrollY>60);
+});
+function toggleMenu(){const nav=document.querySelector('.nav-left');if(!nav)return;if(nav.style.display==='flex'){nav.style.display='';}else{nav.style.cssText='display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ivory);padding:20px 24px;border-bottom:2px solid var(--border);gap:4px;z-index:99;';}}
+</script>
+</body></html>

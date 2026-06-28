@@ -175,9 +175,54 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(160deg,#0ea5e9 
 </div>
 <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="toast-msg"></span></div>
 
-<script src="products.js"></script>
-<script src="_cart.js"></script>
 <script>
+/* ── PRODUITS (intégrés pour fonctionner sans fichier externe) ── */
+const PRODUCTS=[
+  {id:1,name:"Paddle Pro Aventure 11'6\"",category:"Paddles",price:449.00,original:549.00,badge:"new",img:"paddle-1.jpg.jpg",stars:4.9,reviews:128},
+  {id:2,name:"Scooter Sous-Marin Explorer Pro",category:"Seaglides",price:1290.00,original:1490.00,badge:"new",img:"seaglide-1.jpg.jpg",stars:4.9,reviews:34},
+  {id:3,name:"Transat Flottant Paradise",category:"Détente",price:39.90,original:54.90,badge:"sale",img:"chaise-1.jpg.jpg",stars:4.8,reviews:156},
+  {id:4,name:"Mini Ventilateur AirBreeze",category:"Accessoires",price:29.90,original:39.90,badge:"new",img:"airflow-1.jpg.jpg",stars:4.9,reviews:203},
+  {id:5,name:"Filet de Beach Volley Aquatique",category:"Jeux d'Eau",price:59.90,original:79.90,badge:"new",img:"Fillet de jeux.jpg",stars:4.8,reviews:74},
+  {id:6,name:"Paddle Board Rainbow Summer",category:"Paddles",price:399.00,original:499.00,badge:"sale",img:"Paddel colors.jpg",stars:4.9,reviews:92},
+  {id:7,name:"Table Lounge Outdoor Premium",category:"Mobilier",price:189.00,original:249.00,badge:"new",img:"Table extérieur.jpg",stars:4.7,reviews:48},
+  {id:8,name:"Méga Blaster à Eau XXL",category:"Jeux d'Eau",price:24.90,original:34.90,badge:"sale",img:"Pistolet à eau.jpg",stars:4.9,reviews:187},
+  {id:9,name:"Table de Poker Casino Deluxe",category:"Jeux & Loisirs",price:299.00,original:399.00,badge:"new",img:"Table de poker.jpg",stars:4.8,reviews:63},
+  {id:10,name:"Table de Poker Ronde Royale",category:"Jeux & Loisirs",price:329.00,original:429.00,badge:"new",img:"Table poker rond.jpg",stars:4.8,reviews:41},
+  {id:11,name:"Scooter Sous-Marin SeaJet",category:"Seaglides",price:990.00,original:1190.00,badge:"sale",img:"Jet sous marin.jpg",stars:4.7,reviews:29},
+  {id:12,name:"Jet Ski Gonflable Wave Rider",category:"Jeux d'Eau",price:149.00,original:199.00,badge:"new",img:"Jet ski gonflable.jpg",stars:4.8,reviews:56},
+  {id:13,name:"Table de Beer Pong Flottante",category:"Jeux d'Eau",price:44.90,original:59.90,badge:"sale",img:"Table de beer pong.jpg",stars:4.9,reviews:138},
+  {id:14,name:"Table de Jeux Flottante Conviviale",category:"Jeux d'Eau",price:54.90,original:74.90,badge:"new",img:"Table de jeux assis.jpg",stars:4.7,reviews:52},
+  {id:15,name:"Chaise Longue Flottante Lagon",category:"Détente",price:49.90,original:69.90,badge:"sale",img:"Chaise long piscine.jpg",stars:4.9,reviews:174},
+  {id:16,name:"Paddle Aquapark Flypark XXL",category:"Paddles",price:259.00,original:329.00,badge:"new",img:"Paddel flypark.jpg",stars:4.8,reviews:38}
+];
+
+/* ── PANIER (intégré) ── */
+function fmt(n){return n.toFixed(2).replace('.',',');}
+let cart=JSON.parse(localStorage.getItem('__aqz_cart')||'[]');
+function saveCart(){localStorage.setItem('__aqz_cart',JSON.stringify(cart));renderCart();}
+function cartCount(){return cart.reduce((s,i)=>s+i.qty,0);}
+function cartSubtotal(){return cart.reduce((s,i)=>s+i.price*i.qty,0);}
+function getProduct(id){return PRODUCTS.find(x=>x.id===id);}
+function addToCart(id,qty=1){const p=getProduct(id);if(!p)return;const ex=cart.find(x=>x.id===id);if(ex)ex.qty+=qty;else cart.push({id,name:p.name,price:p.price,img:p.img,qty});saveCart();showToast(`"${p.name}" ajouté à votre sélection`);}
+function cQty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);saveCart();}
+function cRemove(id){cart=cart.filter(x=>x.id!==id);saveCart();}
+function openCart(){document.getElementById('overlay').classList.add('open');document.getElementById('cart-drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeCart(){document.getElementById('overlay').classList.remove('open');document.getElementById('cart-drawer').classList.remove('open');document.body.style.overflow='';}
+let _tT;
+function showToast(msg){const el=document.getElementById('toast');if(!el)return;document.getElementById('toast-msg').textContent=msg;el.classList.add('show');clearTimeout(_tT);_tT=setTimeout(()=>el.classList.remove('show'),2800);}
+function renderCart(){
+  const n=cartCount();
+  const badge=document.getElementById('cart-badge');
+  const lbl=document.getElementById('cart-label');
+  const body=document.getElementById('cart-body');
+  const foot=document.getElementById('cart-foot');
+  if(badge){if(n>0){badge.textContent=n;badge.classList.add('visible');}else badge.classList.remove('visible');}
+  if(lbl)lbl.textContent=n>0?`(${n})`:'';
+  if(!body)return;
+  if(!cart.length){body.innerHTML='<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><p>Votre sélection est vide</p></div>';if(foot)foot.style.display='none';return;}
+  if(foot){foot.style.display='block';document.getElementById('cart-total').textContent=fmt(cartSubtotal())+' €';}
+  body.innerHTML='<div class="cart-items">'+cart.map(i=>{const p=getProduct(i.id);const img=i.img||(p&&p.img);return`<div class="cart-item"><div class="ci-img">${img?`<img src="${img}" alt="${i.name}">`:''}</div><div><div class="ci-name">${i.name}</div><div class="ci-price">${fmt(i.price)} €</div><div class="ci-qty"><button class="qty-btn" onclick="cQty(${i.id},-1)">−</button><span class="qty-val">${i.qty}</span><button class="qty-btn" onclick="cQty(${i.id},1)">+</button></div></div><button class="ci-remove" onclick="cRemove(${i.id})">✕</button></div>`;}).join('')+'</div>';
+}
 function toggleMenu(){const nav=document.querySelector('.nav-left');if(!nav)return;if(nav.style.display==='flex'){nav.style.display='';}else{nav.style.cssText='display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(0,60,100,.95);padding:20px 24px;border-bottom:2px solid rgba(255,140,0,.4);gap:4px;z-index:99;backdrop-filter:blur(16px);';}}
 function starsHTML(n){return'★'.repeat(Math.round(n));}
 function renderProducts(){

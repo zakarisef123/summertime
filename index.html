@@ -157,57 +157,7 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(160deg,#0ea5e9 
   <p>Paddles, seaglides, matelas gonflables et accessoires — tout pour profiter de l'été.</p>
 </section>
 
-<section class="prod-list">
-
-  <div class="prod-card" onclick="window.location='produit.html?id=1'">
-    <div class="prod-img">
-      <div class="prod-img-in"><img src="paddle-1.jpg.jpg" alt="Paddle Gonflable Bass Hunter"></div>
-      <span class="p-badge badge-new">Nouveau</span>
-      <div class="prod-over"><button class="prod-quick" onclick="event.stopPropagation();addToCart(1)">Ajouter à la sélection</button></div>
-    </div>
-    <div class="p-cat">Paddles</div>
-    <div class="p-rating"><span class="stars" style="color:#FFE066">★★★★★</span><span class="revs">128 avis</span></div>
-    <div class="p-name">Paddle Gonflable Bass Hunter 11'6"</div>
-    <div class="p-price"><span class="price-c">449,00 €</span><span class="price-o">549,00 €</span></div>
-  </div>
-
-  <div class="prod-card" onclick="window.location='produit.html?id=2'">
-    <div class="prod-img">
-      <div class="prod-img-in"><img src="seaglide-1.jpg.jpg" alt="Seaglide Spinera Catua"></div>
-      <span class="p-badge badge-new">Nouveau</span>
-      <div class="prod-over"><button class="prod-quick" onclick="event.stopPropagation();addToCart(2)">Ajouter à la sélection</button></div>
-    </div>
-    <div class="p-cat">Seaglides</div>
-    <div class="p-rating"><span class="stars" style="color:#FFE066">★★★★★</span><span class="revs">34 avis</span></div>
-    <div class="p-name">Seaglide Spinera Catua</div>
-    <div class="p-price"><span class="price-c">1 290,00 €</span><span class="price-o">1 490,00 €</span></div>
-  </div>
-
-  <div class="prod-card" onclick="window.location='produit.html?id=3'">
-    <div class="prod-img">
-      <div class="prod-img-in"><img src="chaise-1.jpg.jpg" alt="Chaise Flottante Tropicale"></div>
-      <span class="p-badge badge-sale">Offre</span>
-      <div class="prod-over"><button class="prod-quick" onclick="event.stopPropagation();addToCart(3)">Ajouter à la sélection</button></div>
-    </div>
-    <div class="p-cat">Matelas Gonflables</div>
-    <div class="p-rating"><span class="stars" style="color:#FFE066">★★★★★</span><span class="revs">156 avis</span></div>
-    <div class="p-name">Chaise Flottante Tropicale</div>
-    <div class="p-price"><span class="price-c">39,90 €</span><span class="price-o">54,90 €</span></div>
-  </div>
-
-  <div class="prod-card" onclick="window.location='produit.html?id=4'">
-    <div class="prod-img">
-      <div class="prod-img-in"><img src="airflow-1.jpg.jpg" alt="AirFlow Mini Ventilateur"></div>
-      <span class="p-badge badge-new">Nouveau</span>
-      <div class="prod-over"><button class="prod-quick" onclick="event.stopPropagation();addToCart(4)">Ajouter à la sélection</button></div>
-    </div>
-    <div class="p-cat">Accessoires</div>
-    <div class="p-rating"><span class="stars" style="color:#FFE066">★★★★★</span><span class="revs">203 avis</span></div>
-    <div class="p-name">AirFlow Mini Ventilateur Portable</div>
-    <div class="p-price"><span class="price-c">29,90 €</span><span class="price-o">39,90 €</span></div>
-  </div>
-
-</section>
+<section class="prod-list" id="prod-list"></section>
 
 <footer class="site-footer">
   <div class="footer-bottom"><p>© 2026 summertime — Tous droits réservés</p><div class="pay-row"><span class="pay-chip">VISA</span><span class="pay-chip">MC</span><span class="pay-chip">AMEX</span><span class="pay-chip">PAYPAL</span></div></div>
@@ -229,6 +179,26 @@ body{font-family:'Poppins',sans-serif;background:linear-gradient(160deg,#0ea5e9 
 <script src="_cart.js"></script>
 <script>
 function toggleMenu(){const nav=document.querySelector('.nav-left');if(!nav)return;if(nav.style.display==='flex'){nav.style.display='';}else{nav.style.cssText='display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:rgba(0,60,100,.95);padding:20px 24px;border-bottom:2px solid rgba(255,140,0,.4);gap:4px;z-index:99;backdrop-filter:blur(16px);';}}
+function starsHTML(n){return'★'.repeat(Math.round(n));}
+function renderProducts(){
+  const list=document.getElementById('prod-list');
+  if(!list||typeof PRODUCTS==='undefined')return;
+  list.innerHTML=PRODUCTS.map(p=>{
+    const badge=p.badge==='sale'?'<span class="p-badge badge-sale">Offre</span>':(p.badge==='new'?'<span class="p-badge badge-new">Nouveau</span>':'');
+    return `<div class="prod-card" onclick="window.location='produit.html?id=${p.id}'">
+      <div class="prod-img">
+        <div class="prod-img-in"><img src="${p.img}" alt="${p.name}"></div>
+        ${badge}
+        <div class="prod-over"><button class="prod-quick" onclick="event.stopPropagation();addToCart(${p.id})">Ajouter à la sélection</button></div>
+      </div>
+      <div class="p-cat">${p.category}</div>
+      <div class="p-rating"><span class="stars" style="color:#FFE066">${starsHTML(p.stars)}</span><span class="revs">${p.reviews} avis</span></div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-price"><span class="price-c">${fmt(p.price)} €</span>${p.original?`<span class="price-o">${fmt(p.original)} €</span>`:''}</div>
+    </div>`;
+  }).join('');
+}
+renderProducts();
 renderCart();
 window.addEventListener('scroll',()=>{document.getElementById('main-header').classList.toggle('scrolled',scrollY>60);});
 </script>
